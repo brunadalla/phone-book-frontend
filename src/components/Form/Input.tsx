@@ -32,7 +32,7 @@ const inputVariation: InputVariationOptions = {
   error: "red.600",
   default: "gray.200",
   focus: "blue.600",
-  filled: "gray.200",
+  filled: "gray.900",
 }
 
 const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (

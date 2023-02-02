@@ -1,13 +1,11 @@
-import { Switch } from "react-router-dom"
-import { Router } from "./Router"
-
+import { Routes, Route } from "react-router-dom"
 import { Login } from "../pages/Login"
 
-export const Routes = () => {
+export const Router = () => {
   
   return (
-    <Switch>
-      <Router exact path='/' component={Login} />
-    </Switch>
+    <Routes>
+      <Route path='/' element={<Login/>} />
+    </Routes>
   )
 }

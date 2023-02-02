@@ -1,11 +1,10 @@
-import { ChakraProvider } from "@chakra-ui/react"
+import { ChakraBaseProvider } from "@chakra-ui/react"
+import { Router } from "./routes"
 import { theme } from "./styles/theme"
-import { Routes } from "./routes"
 
-export const App = () => {
-    return (
-        <ChakraProvider theme={theme}>
-            <Routes />
-        </ChakraProvider>
-    )
-}
+export const App = () => { return(
+    <ChakraBaseProvider theme={theme}>
+        <Router />
+        </ChakraBaseProvider>
+
+)}

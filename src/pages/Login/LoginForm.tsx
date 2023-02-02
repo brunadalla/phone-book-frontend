@@ -13,14 +13,12 @@ interface LoginFormProps {
   handleSignIn: () => void
   errors: DeepMap<FieldValues, FieldError>
   register: UseFormRegister<FieldValues>
-  loading: boolean
 }
 
 export const LoginForm = ({
   handleSignIn,
   register,
   errors,
-  loading,
 }: LoginFormProps) => {
   return (
     <Flex
@@ -40,13 +38,18 @@ export const LoginForm = ({
           error={errors.email}
           {...register("email")}
         />
-        {errors.email && <Text 
-          fontSize='md'
-          fontFamily='Nunito'
-          w='100%'
-          color='red.600'
-          textAlign='left'> {errors.mail} 
-          </Text>}
+        {errors.email && (
+          <Text
+            fontSize='md'
+            fontFamily='Nunito'
+            w='100%'
+            color='red.600'
+            textAlign='left'
+          >
+            {" "}
+            {errors.mail}
+          </Text>
+        )}
 
         <Input
           placeholder='Write your password'
@@ -56,16 +59,15 @@ export const LoginForm = ({
           error={errors.password}
           {...register("password")}
         />
-        {errors.password && <Text 
-          fontSize='md'
-          fontFamily='Nunito'
-          w='100%'
-          color='red.600'> {errors.password} 
-          </Text>}
+        {errors.password && (
+          <Text fontSize='md' fontFamily='Nunito' w='100%' color='red.600'>
+            {" "}
+            {errors.password}
+          </Text>
+        )}
       </VStack>
 
       <Button
-        isLoading={loading}
         w='100%'
         h='50px'
         bg='orange.400'
@@ -78,6 +80,7 @@ export const LoginForm = ({
       >
         Login
       </Button>
+      
     </Flex>
   )
 }

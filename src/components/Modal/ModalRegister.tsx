@@ -1,8 +1,6 @@
-import React from "react"
 import {
   Button,
-  FormControl,
-  FormLabel,
+  createStandaloneToast,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,11 +12,14 @@ import {
   useDisclosure,
 } from "@chakra-ui/react"
 
+import { useNavigate } from "react-router-dom"
+
 import { Input } from "../../components/Form/Input"
 
 import * as yup from "yup"
-import { useForm } from "react-hook-form"
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { api } from "../../services/api"
 
 const signInSchema = yup.object().shape({
   name: yup.string().required("Name required"),
@@ -27,9 +28,19 @@ const signInSchema = yup.object().shape({
   password: yup.string().required("Password required"),
 })
 
+const { toast } = createStandaloneToast()
+
+interface ISignupData {
+  name: string
+  phone: string
+  email: string
+  password: string
+}
+
 const ModalRegister = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const navigate = useNavigate()
+  
   const {
     formState: { errors },
     register,
@@ -37,6 +48,18 @@ const ModalRegister = () => {
   } = useForm({
     resolver: yupResolver(signInSchema),
   })
+
+  const handleSignup = ({ name, phone, email, password }: ISignupData) => {
+    api
+      .post("/users", { name, phone, email, password })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+
+      })
+  }
 
   return (
     <>
@@ -56,7 +79,10 @@ const ModalRegister = () => {
         <ModalOverlay backdropFilter='blur(2px)' />
         <ModalContent
           as='form'
-          onSubmit={() => handleSubmit}
+          onSubmit={
+              handleSubmit(handleSignup as SubmitHandler<FieldValues>)
+            
+          }
           borderRadius='12px'
           bgColor='gray.200'
           p='10px 5px 15px 5px'
@@ -122,6 +148,7 @@ const ModalRegister = () => {
             >
               Cancel
             </Button>
+            
           </ModalFooter>
         </ModalContent>
       </Modal>

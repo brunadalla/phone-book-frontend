@@ -1,4 +1,10 @@
-import { createStandaloneToast, Flex, Img, Link, Text, VStack } from "@chakra-ui/react"
+import {
+  createStandaloneToast,
+  Flex,
+  Img,
+  Text,
+  VStack,
+} from "@chakra-ui/react"
 import { FieldValues, SubmitHandler } from "react-hook-form/dist/types"
 
 import * as yup from "yup"
@@ -13,6 +19,7 @@ import { Header } from "../../components/Header"
 import Background from "../../assets/background.png"
 import { UseGetScreenWidth } from "../../hook"
 import ModalRegister from "../../components/Modal/ModalRegister"
+import { useNavigate } from "react-router-dom"
 
 const { toast } = createStandaloneToast()
 
@@ -27,8 +34,8 @@ interface SignInData {
 }
 
 export const Login = () => {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [error, setError] = useState("")
+  const navigate = useNavigate()
 
   const { signIn } = useAuth()
 
@@ -41,12 +48,13 @@ export const Login = () => {
   })
 
   const handleSignIn = (data: SignInData) => {
-    setLoading(true)
     signIn(data)
-      .then((_) => setLoading(false))
+    .then((res) => {console.log(res)
+    })
       .catch((err) => {
+        console.log(err)
         setError(err.message)
-        setLoading(false)
+        
       })
   }
 
@@ -92,7 +100,6 @@ export const Login = () => {
           handleSignIn={handleSubmit(
             handleSignIn as SubmitHandler<FieldValues>
           )}
-          loading={loading}
           register={register}
         />
         <Flex
@@ -103,17 +110,18 @@ export const Login = () => {
           textAlign='center'
         >
           <Text> Don`t have an account yet? </Text>
-          <ModalRegister/>
+          <ModalRegister />
         </Flex>
       </VStack>
 
-      {error && toast({
-          title: 'Ooops...',
-          description: 'Incorrect email or password. Try again!',
-          status: 'error',
+      {error &&
+        toast({
+          title: "Ooops...",
+          description: "Incorrect email or password. Try again!",
+          status: "error",
           duration: 5000,
           isClosable: true,
-          position: 'top'
+          position: "top",
         })}
     </Flex>
   )
