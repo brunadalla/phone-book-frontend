@@ -1,6 +1,5 @@
-import { Button, Flex, FormControl, Heading } from "@chakra-ui/react"
+import { Button, Flex, FormControl, Heading, Input } from "@chakra-ui/react"
 import { BiSearch } from "react-icons/bi"
-import { Input } from "@chakra-ui/react"
 
 export const Filter = () => {
   return (
@@ -18,8 +17,7 @@ export const Filter = () => {
         color='blue.600'
         fontWeight='semibold'
       >
-        {" "}
-        Contacts{" "}
+        Contacts
       </Heading>
       <FormControl
         display='flex'
@@ -35,8 +33,7 @@ export const Filter = () => {
           bgColor='orange.400'
           _hover={{ backgroundColor: "orange.500" }}
         >
-          {" "}
-          <BiSearch size='25' color='white' />{" "}
+          <BiSearch size='25' color='white' />
         </Button>
       </FormControl>
     </Flex>

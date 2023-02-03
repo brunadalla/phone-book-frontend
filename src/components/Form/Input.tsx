@@ -1,4 +1,3 @@
-import { IconType } from "react-icons"
 import {
   FormControl,
   FormErrorMessage,
@@ -16,6 +15,8 @@ import {
   ForwardRefRenderFunction,
   forwardRef,
 } from "react"
+
+import { IconType } from "react-icons"
 
 interface InputProps extends ChakraInputProps {
   name: string

@@ -1,6 +1,5 @@
-import { Button, Flex, FormControl } from "@chakra-ui/react"
+import { Button, Flex, FormControl, Input } from "@chakra-ui/react"
 import { BiSearch } from "react-icons/bi"
-import { Input } from "@chakra-ui/react"
 
 export const FilterMobile = () => {
   return (
@@ -12,12 +11,7 @@ export const FilterMobile = () => {
       borderBottomColor='blue.600'
       alignItems='center'
     >
-      <FormControl
-        display='flex'
-        alignItems='flex-end'
-        w='100%'
-        gap='4'
-      >
+      <FormControl display='flex' alignItems='flex-end' w='100%' gap='4'>
         <Input name='search' placeholder='Search contact' h='40px' />
 
         <Button

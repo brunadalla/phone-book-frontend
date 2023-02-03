@@ -8,12 +8,13 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react"
+import { useNavigate } from "react-router-dom"
+
 import { BsTelephone, BsEnvelope } from "react-icons/bs"
 import { BiLogOut } from "react-icons/bi"
 
 import { useAuth } from "../../contexts/AuthContext"
 import ImageDash from "../../assets/imageDash.png"
-import { useNavigate } from "react-router-dom"
 
 export const Aside = () => {
   const { user, signOut } = useAuth()
@@ -21,7 +22,7 @@ export const Aside = () => {
 
   const handleSignOut = () => {
     signOut()
-    navigate('/')
+    navigate("/")
   }
 
   return (
@@ -59,8 +60,7 @@ export const Aside = () => {
           gap='10px'
         >
           <Text fontSize='xl' fontWeight='semibold'>
-            {" "}
-            {user.name}{" "}
+            {user.name}
           </Text>
           <HStack>
             <BsEnvelope />

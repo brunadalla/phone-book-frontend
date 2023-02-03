@@ -5,21 +5,21 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react"
-import { FieldValues, SubmitHandler } from "react-hook-form/dist/types"
 
-import * as yup from "yup"
-import { useForm } from "react-hook-form"
+import { FieldValues, SubmitHandler } from "react-hook-form/dist/types"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useForm } from "react-hook-form"
+import * as yup from "yup"
 
 import { useState } from "react"
 
-import { useAuth } from "../../contexts/AuthContext"
+import { UseGetScreenWidth } from "../../hook"
+import { useNavigate } from "react-router-dom"
 import { LoginForm } from "./LoginForm"
+import ModalRegister from "../../components/Modal/ModalRegister"
+import { useAuth } from "../../contexts/AuthContext"
 import { Header } from "../../components/Header"
 import Background from "../../assets/background.png"
-import { UseGetScreenWidth } from "../../hook"
-import ModalRegister from "../../components/Modal/ModalRegister"
-import { useNavigate } from "react-router-dom"
 
 const { toast } = createStandaloneToast()
 

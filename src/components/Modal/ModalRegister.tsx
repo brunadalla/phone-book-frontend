@@ -12,14 +12,14 @@ import {
   useDisclosure,
 } from "@chakra-ui/react"
 
-import { useState } from 'react'
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { Input } from "../../components/Form/Input"
-
-import * as yup from "yup"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
+
+import { Input } from "../../components/Form/Input"
 import { api } from "../../services/api"
 
 const signInSchema = yup.object().shape({

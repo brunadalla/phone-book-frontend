@@ -9,11 +9,14 @@ import {
   MenuList,
   VStack,
 } from "@chakra-ui/react"
+
+import { useNavigate } from "react-router-dom"
+
 import { BsTelephone, BsEnvelope } from "react-icons/bs"
 import { BiLogOut } from "react-icons/bi"
 import { HiOutlineMenu } from "react-icons/hi"
+
 import { useAuth } from "../../contexts/AuthContext"
-import { useNavigate } from "react-router-dom"
 
 export const HeaderMobile = () => {
   const { user, signOut } = useAuth()

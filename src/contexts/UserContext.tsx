@@ -1,6 +1,7 @@
-import { createContext, ReactNode } from "react"
-import { api } from "../services/api"
+import { createContext, ReactNode, useContext } from "react"
+
 import { useAuth } from "./AuthContext"
+import { api } from "../services/api"
 
 interface IUserProviderProps {
   children: ReactNode
@@ -13,17 +14,26 @@ interface IDataProps {
 }
 
 interface IUserData {
-  updateUser: (token: string, data: IDataProps) => void
-  deleteUser: (token: string) => void
+  updateUser: (data: IDataProps) => void
+  deleteUser: () => void
 }
-export const UserContext = createContext<IUserData>({} as IUserData)
+const UserContext = createContext<IUserData>({} as IUserData)
 
-export const UserProvider = ({ children }: IUserProviderProps) => {
-  const { signOut } = useAuth()
+const useUser = () => {
+  const context = useContext(UserContext)
 
-  const userId = localStorage.getItem("@userId")
+  if (!context) {
+    throw new Error("useUser must be used within as UserProvider")
+  }
+  return context
+}
 
-  const updateUser = async (token: string, data: IDataProps) => {
+const UserProvider = ({ children }: IUserProviderProps) => {
+  const { signOut, token, user } = useAuth()
+
+  const userId = user?.id
+
+  const updateUser = async (data: IDataProps) => {
     await api
       .patch(`/users/${userId}`, data, {
         headers: {
@@ -34,7 +44,7 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
       .catch((err) => console.log(err))
   }
 
-  const deleteUser = async (token: string) => {
+  const deleteUser = async () => {
     await api
       .delete(`/users/${userId}`, {
         headers: {
@@ -51,3 +61,5 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
     </UserContext.Provider>
   )
 }
+
+export { UserProvider, useUser }

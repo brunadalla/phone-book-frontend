@@ -1,19 +1,30 @@
 import {
-  Box,
   Button,
   Flex,
+  Grid,
+  GridItem,
   HStack,
   Text,
-  Wrap,
-  WrapItem,
 } from "@chakra-ui/react"
+
 import { CustomCard } from "../../components/Card"
+import { CardMobile } from "../../components/Card/CardMobile"
 import { UseGetScreenWidth } from "../../hook"
 
-export const List = () => {
-  const [, width] = UseGetScreenWidth()
+interface IContact {
+  id: string
+  name: string
+  phone: string
+  email: string
+  createdAt: Date
+}
 
-  const contacts: Array<string> = []
+interface IContactListProps {
+  contacts: IContact[]
+}
+
+export const List = ({ contacts }: IContactListProps) => {
+  const [, width] = UseGetScreenWidth()
 
   return (
     <Flex w='100%' flexDirection='column' gap='4' pt='4' color='gray.900'>
@@ -32,7 +43,7 @@ export const List = () => {
           <Button
             h='100%'
             bgColor='green.600'
-            _hover={{ bgColor: "green.800" }}
+            _hover={{ bgColor: "green.800", color: "white" }}
           >
             + New Contact
           </Button>
@@ -43,18 +54,44 @@ export const List = () => {
             bgColor='green.600'
             _hover={{ bgColor: "green.800" }}
           >
-            + New 
+            + New
           </Button>
         )}
       </HStack>
 
-      <Wrap>
+      <Grid
+        h={["50vh", "50vh", "65vh", "65vh"]}
+        overflowY='scroll'
+        templateColumns={[
+          "repeat(1, 1fr)",
+          "repeat(1, 1fr)",
+          "repeat(4, 1fr)",
+          "repeat(4, 1fr)",
+        ]}
+        gap={["1", "1", "4", "4"]}
+      >
         {contacts.map((contact) => (
-          <WrapItem>
-            {/*  <CustomCard contact={contact} key={contact.id}/> */}
-          </WrapItem>
+          <GridItem>
+            {width >= 768 ? (
+              <CustomCard
+                name={contact.name}
+                phone={contact.phone}
+                email={contact.email}
+                date={contact.createdAt}
+                key={contact.id}
+              />
+            ) : (
+              <CardMobile
+                name={contact.name}
+                phone={contact.phone}
+                email={contact.email}
+                date={contact.createdAt}
+                key={contact.id}
+              />
+            )}
+          </GridItem>
         ))}
-      </Wrap>
+      </Grid>
     </Flex>
   )
 }

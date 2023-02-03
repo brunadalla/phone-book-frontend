@@ -4,6 +4,7 @@ import {
   FieldValues,
   UseFormRegister,
 } from "react-hook-form"
+
 import { Button, Flex, Text, VStack } from "@chakra-ui/react"
 import { FaEnvelope, FaLock } from "react-icons/fa"
 
@@ -80,7 +81,6 @@ export const LoginForm = ({
       >
         Login
       </Button>
-      
     </Flex>
   )
 }
