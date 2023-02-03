@@ -5,6 +5,8 @@ import {
   useContext,
   useState,
 } from "react"
+import jwt_decode from "jwt-decode"
+
 import { api } from "../services/api"
 
 interface AuthProviderProps {
@@ -15,6 +17,7 @@ interface User {
   id: string
   name: string
   email: string
+  phone: string
 }
 
 interface AuthState {
@@ -46,8 +49,7 @@ const useAuth = () => {
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-    const [data, setData] = useState<AuthState>(() => {
-
+  const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem("@token")
     const user = localStorage.getItem("@user")
 
@@ -60,7 +62,17 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signIn = useCallback(async ({ email, password }: SignInCredentials) => {
     const response = await api.post("/login", { email, password })
-    const { token, user } = response.data
+    const { token } = response.data
+
+    const decoded: any = jwt_decode(token)
+    const userId = decoded.sub
+
+    const userResponse = await api.get(`/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    const user = userResponse.data
 
     localStorage.setItem("@token", token)
     localStorage.setItem("@user", JSON.stringify(user))

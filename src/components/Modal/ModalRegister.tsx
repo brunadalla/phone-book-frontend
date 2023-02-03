@@ -49,8 +49,8 @@ const ModalRegister = () => {
     resolver: yupResolver(signInSchema),
   })
 
-  const handleSignup = ({ name, phone, email, password }: ISignupData) => {
-    api
+  const handleSignup = async ({ name, phone, email, password }: ISignupData) => {
+    await api
       .post("/users", { name, phone, email, password })
       .then((res) => {
         console.log(res)

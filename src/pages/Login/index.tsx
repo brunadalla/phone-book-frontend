@@ -49,12 +49,10 @@ export const Login = () => {
 
   const handleSignIn = (data: SignInData) => {
     signIn(data)
-    .then((res) => {console.log(res)
-    })
+    .then(() => navigate('/dashboard'))
       .catch((err) => {
         console.log(err)
         setError(err.message)
-        
       })
   }
 
