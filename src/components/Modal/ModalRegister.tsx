@@ -12,6 +12,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react"
 
+import { useState } from 'react'
 import { useNavigate } from "react-router-dom"
 
 import { Input } from "../../components/Form/Input"
@@ -39,8 +40,10 @@ interface ISignupData {
 
 const ModalRegister = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [error, setError] = useState("")
+
   const navigate = useNavigate()
-  
+
   const {
     formState: { errors },
     register,
@@ -49,15 +52,20 @@ const ModalRegister = () => {
     resolver: yupResolver(signInSchema),
   })
 
-  const handleSignup = async ({ name, phone, email, password }: ISignupData) => {
+  const handleSignup = async ({
+    name,
+    phone,
+    email,
+    password,
+  }: ISignupData) => {
     await api
       .post("/users", { name, phone, email, password })
       .then((res) => {
-        console.log(res)
+        navigate(0)
       })
       .catch((err) => {
         console.log(err)
-
+        setError(err)
       })
   }
 
@@ -79,10 +87,7 @@ const ModalRegister = () => {
         <ModalOverlay backdropFilter='blur(2px)' />
         <ModalContent
           as='form'
-          onSubmit={
-              handleSubmit(handleSignup as SubmitHandler<FieldValues>)
-            
-          }
+          onSubmit={handleSubmit(handleSignup as SubmitHandler<FieldValues>)}
           borderRadius='12px'
           bgColor='gray.200'
           p='10px 5px 15px 5px'
@@ -114,6 +119,7 @@ const ModalRegister = () => {
             <Input
               label='Email'
               placeholder='louis@mail.com'
+              type='email'
               error={errors.email}
               {...register("email")}
             />
@@ -122,6 +128,7 @@ const ModalRegister = () => {
               label='Password'
               placeholder='******'
               error={errors.password}
+              type='password'
               {...register("password")}
             />
           </ModalBody>
@@ -148,10 +155,18 @@ const ModalRegister = () => {
             >
               Cancel
             </Button>
-            
           </ModalFooter>
         </ModalContent>
       </Modal>
+      {error &&
+        toast({
+          title: "Ooops...",
+          description: "Incorrect email or password. Try again!",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top",
+        })}
     </>
   )
 }
