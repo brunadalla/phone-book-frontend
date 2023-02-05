@@ -10,16 +10,19 @@ import {
 } from "@chakra-ui/react"
 import { BsTelephone, BsEnvelope, BsCalendar } from "react-icons/bs"
 import { HiOutlinePencilAlt, HiOutlineTrash } from "react-icons/hi"
+import { useContact } from "../../contexts/ContactContext"
 
 interface IContactProps {
+  id: string
   name: string
   phone: string
   email: string
   date: Date
 }
 
-export const CustomCard = ({ name, phone, email, date }: IContactProps) => {
+export const CustomCard = ({ id, name, phone, email, date }: IContactProps) => {
   const formatedDate = new Date(date)
+  const { deleteContact } = useContact()
 
   return (
     <Card overflowWrap='break-word' bgColor='green.500'>
@@ -46,6 +49,7 @@ export const CustomCard = ({ name, phone, email, date }: IContactProps) => {
             size='20'
             bgColor='transparent'
             _hover={{ color: "green.800" }}
+            onClick={() => deleteContact(id)}
           >
             <HiOutlineTrash size='20' />
           </Button>

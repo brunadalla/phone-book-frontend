@@ -6,6 +6,10 @@ import {
   InputProps as ChakraInputProps,
   InputLeftElement,
   InputGroup,
+  InputRightElement,
+  Tooltip,
+  HStack,
+  Text,
 } from "@chakra-ui/react"
 
 import {
@@ -17,6 +21,7 @@ import {
 } from "react"
 
 import { IconType } from "react-icons"
+import { CgDanger } from "react-icons/cg"
 
 interface InputProps extends ChakraInputProps {
   name: string
@@ -64,16 +69,20 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
   return (
     <FormControl isInvalid={!!error}>
       {!!label && (
-        <FormLabel
-          color='gray.900'
-          fontSize='lg'
-          fontWeight={500}
-          fontFamily='Poppins'
-        >
-          {label}
-        </FormLabel>
+        <HStack justifyContent='space-between'>
+          <FormLabel
+            color='gray.900'
+            fontSize='lg'
+            fontWeight={500}
+            fontFamily='Poppins'
+            mb='0'
+          >
+            {label}
+          </FormLabel>
+          {error && <Text fontFamily='Nunito' color='red.600' fontSize='sm' fontWeight='semibold'> {error.message}</Text>}
+        </HStack>
       )}
-      <InputGroup flexDirection='column'>
+      <InputGroup mt='5px'>
         {Icon && (
           <InputLeftElement color={inputVariation[variation]} mt='1'>
             <Icon />
@@ -99,7 +108,11 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
           ref={ref}
           {...rest}
         />
-        {!!error && <FormErrorMessage mt='2'>{error.message}</FormErrorMessage>}
+        {error && (
+          <InputRightElement pointerEvents='none' h='50px'>
+            <CgDanger color='red' size='20' />
+          </InputRightElement>
+        )}
       </InputGroup>
     </FormControl>
   )

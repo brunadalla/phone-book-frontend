@@ -7,85 +7,59 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react"
-
-import { useNavigate } from "react-router-dom"
 
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 
 import { Input } from "../../components/Form/Input"
-import { api } from "../../services/api"
+import { UseGetScreenWidth } from "../../hook"
+import { useContact } from "../../contexts/ContactContext"
 
-const signInSchema = yup.object().shape({
+const createContactSchema = yup.object().shape({
   name: yup.string().required("name required"),
   phone: yup.string().required("phone required"),
   email: yup.string().required("email required").email("invalid email"),
-  password: yup.string().required("password required"),
 })
 
-interface ISignupData {
-  name: string
-  phone: string
-  email: string
-  password: string
-}
-
-const ModalRegister = () => {
+const ModalCreateContact = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { createContact } = useContact()
 
-  const navigate = useNavigate()
+  const [, width] = UseGetScreenWidth()
 
   const {
     formState: { errors },
     register,
     handleSubmit,
   } = useForm({
-    resolver: yupResolver(signInSchema),
+    resolver: yupResolver(createContactSchema),
   })
-
-  const handleSignup = async ({
-    name,
-    phone,
-    email,
-    password,
-  }: ISignupData) => {
-    await api
-      .post("/users", { name, phone, email, password })
-      .then((res) => {
-        navigate(0)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
 
   return (
     <>
-      <Text
+      <Button
         onClick={onOpen}
-        fontSize='lg'
         fontFamily='Nunito'
-        w='100%'
-        textAlign='center'
-        fontWeight={700}
-        _hover={{ cursor: "pointer", color: "blue.600" }}
-      >
-        Register now!
-      </Text>
+        fontWeight='bold'
+        p={width >= 768 ? "6" : "none"}
+        children={width >= 768 ? "+ New Contact" : "+ New"}
+        h='100%'
+        bgColor='green.600'
+        _hover={{ bgColor: "green.800", color: "white" }}
+      />
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay backdropFilter='blur(2px)' />
         <ModalContent
           as='form'
-          onSubmit={handleSubmit(handleSignup as SubmitHandler<FieldValues>)}
+          onSubmit={handleSubmit(createContact as SubmitHandler<FieldValues>)}
           borderRadius='12px'
           bgColor='gray.200'
           p='10px 5px 15px 5px'
-          m={['4', '4', '6', '6']}
+          m={["4", "4", "6", "6"]}
           alignSelf='center'
         >
           <ModalHeader
@@ -94,7 +68,7 @@ const ModalRegister = () => {
             fontWeight={600}
             fontFamily='Poppins'
           >
-            Create your Account
+            Add new Contact
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6} display='flex' flexDirection='column' gap='10px'>
@@ -119,14 +93,6 @@ const ModalRegister = () => {
               error={errors.email}
               {...register("email")}
             />
-
-            <Input
-              label='Password'
-              placeholder='******'
-              error={errors.password}
-              type='password'
-              {...register("password")}
-            />
           </ModalBody>
           <ModalFooter display='flex' flexDirection='column' gap='10px'>
             <Button
@@ -139,7 +105,7 @@ const ModalRegister = () => {
               fontSize='md'
               fontWeight='semibold'
             >
-              Create
+              Add
             </Button>
             <Button
               onClick={onClose}
@@ -154,9 +120,8 @@ const ModalRegister = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      
     </>
   )
 }
 
-export default ModalRegister
+export default ModalCreateContact

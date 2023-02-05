@@ -113,19 +113,17 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
       .catch((err) => console.log(err))
   }
 
-  const searchContact = useCallback(async (contactName: string) => {
-    const response = await api.get(`/contacts?name_like=${contactName}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    if (!response.data.length) {
-      setContactNotFound(contactName)
+  const searchContact = useCallback(async (data: string) => {
+    const filteredContacts = contacts.filter(contact => contact.name.includes(data) || contact.phone.includes(data) || contact.email.includes(data))
+
+
+    if (!filteredContacts.length) {
+      setContactNotFound(data)
       return setNotFound(true)
     }
 
     setNotFound(false)
-    setContacts(response.data)
+    setContacts(filteredContacts)
   }, [])
 
   return (

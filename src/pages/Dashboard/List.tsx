@@ -9,6 +9,7 @@ import {
 
 import { CustomCard } from "../../components/Card"
 import { CardMobile } from "../../components/Card/CardMobile"
+import ModalCreateContact from "../../components/Modal/ModalCreateContact"
 import { UseGetScreenWidth } from "../../hook"
 
 interface IContact {
@@ -39,24 +40,7 @@ export const List = ({ contacts }: IContactListProps) => {
           <Text> Recent </Text>
           <Text> A - B</Text>
         </HStack>
-        {width >= 768 ? (
-          <Button
-            h='100%'
-            bgColor='green.600'
-            _hover={{ bgColor: "green.800", color: "white" }}
-          >
-            + New Contact
-          </Button>
-        ) : (
-          <Button
-            h='100%'
-            p='6'
-            bgColor='green.600'
-            _hover={{ bgColor: "green.800" }}
-          >
-            + New
-          </Button>
-        )}
+        <ModalCreateContact/>
       </HStack>
 
       <Grid
@@ -74,6 +58,7 @@ export const List = ({ contacts }: IContactListProps) => {
           <GridItem>
             {width >= 768 ? (
               <CustomCard
+                id={contact.id}
                 name={contact.name}
                 phone={contact.phone}
                 email={contact.email}

@@ -1,7 +1,10 @@
 import { Button, Flex, FormControl, Heading, Input } from "@chakra-ui/react"
 import { BiSearch } from "react-icons/bi"
+import { useContact } from "../../contexts/ContactContext"
 
 export const Filter = () => {
+  const { searchContact } = useContact()
+
   return (
     <Flex
       justifyContent='space-between'
