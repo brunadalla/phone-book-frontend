@@ -11,8 +11,6 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
 import * as yup from "yup"
 
-import { useState } from "react"
-
 import { UseGetScreenWidth } from "../../hook"
 import { useNavigate } from "react-router-dom"
 import { LoginForm } from "./LoginForm"
@@ -34,7 +32,6 @@ interface SignInData {
 }
 
 export const Login = () => {
-  const [error, setError] = useState("")
   const navigate = useNavigate()
 
   const { signIn } = useAuth()
@@ -48,11 +45,28 @@ export const Login = () => {
   })
 
   const handleSignIn = (data: SignInData) => {
+    toast({
+      title: "Loading",
+      description: "Wait until we finish it!",
+      position: "top-right",
+      duration: 120000,
+      isClosable: false,
+      status: 'info'
+    })
     signIn(data)
-      .then(() => navigate("/dashboard"))
+      .then(() => {
+        toast.closeAll()
+        navigate("/dashboard")
+      })
       .catch((err) => {
-        console.log(err)
-        setError(err.message)
+        toast.closeAll()
+        toast({
+          title: "Oops!",
+          description: "Something went wrong :(",
+          position: "top-right",
+          isClosable: true,
+          status: "error",
+        })
       })
   }
 
@@ -111,16 +125,6 @@ export const Login = () => {
           <ModalRegister />
         </Flex>
       </VStack>
-
-      {error &&
-        toast({
-          title: "Ooops...",
-          description: "Incorrect email or password. Try again!",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-          position: "top",
-        })}
     </Flex>
   )
 }

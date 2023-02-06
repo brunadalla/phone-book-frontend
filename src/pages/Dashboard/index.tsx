@@ -10,12 +10,12 @@ import { Aside } from "./Aside"
 import { List } from "./List"
 
 const Dashboard = () => {
-  const { contacts, loadContacts } = useContact()
+  const { contacts, loadContacts, isAlphabeticalOrder } = useContact()
   const [, width] = UseGetScreenWidth()
 
   useEffect(() => {
     loadContacts()
-  }, [])
+  }, [isAlphabeticalOrder])
 
   return (
     <Flex

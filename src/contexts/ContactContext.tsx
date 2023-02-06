@@ -1,10 +1,4 @@
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useState,
-} from "react"
+import { createContext, ReactNode, useContext, useState } from "react"
 
 import { api } from "../services/api"
 import { useAuth } from "./AuthContext"
@@ -39,9 +33,8 @@ interface IContactData {
   loadContacts: () => Promise<void>
   deleteContact: (contactId: string) => Promise<void>
   updateContact: (contactId: string, data: IDataUpProps) => Promise<void>
-  searchContact: (contactName: string) => Promise<void>
-  notFound: boolean
-  contactNotFound: string
+  isAlphabeticalOrder: boolean
+  setIsAlphabeticalOrder: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const ContactContext = createContext<IContactData>({} as IContactData)
@@ -57,10 +50,9 @@ const useContact = () => {
 
 const ContactProvider = ({ children }: IContactProviderProps) => {
   const { token } = useAuth()
-
+  
   const [contacts, setContacts] = useState<IContact[]>([])
-  const [notFound, setNotFound] = useState(false)
-  const [contactNotFound, setContactNotFound] = useState("")
+  const [isAlphabeticalOrder, setIsAlphabeticalOrder] = useState(false)
 
   const loadContacts = async () => {
     await api
@@ -70,7 +62,23 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
         },
       })
       .then((res) => {
-        setContacts(res.data)
+        setContacts(
+          isAlphabeticalOrder
+            ? res.data.sort((a: IContact, b: IContact) => {
+                if (a.name < b.name) {
+                  return -1
+                } else {
+                  return 1
+                }
+              })
+            : res.data.sort((a: IContact, b: IContact) => {
+                if (a.createdAt > b.createdAt) {
+                  return -1
+                } else {
+                  return 1
+                }
+              })
+        )
       })
       .catch((err) => console.log(err))
   }
@@ -83,7 +91,7 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
         },
       })
       .then((res) => setContacts((oldContacts) => [...oldContacts, res.data]))
-      .catch((err) => console.log(err))
+      .catch((err) => console.log(err.message))
   }
 
   const updateContact = async (contactId: string, data: IDataUpProps) => {
@@ -113,19 +121,6 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
       .catch((err) => console.log(err))
   }
 
-  const searchContact = useCallback(async (data: string) => {
-    const filteredContacts = contacts.filter(contact => contact.name.includes(data) || contact.phone.includes(data) || contact.email.includes(data))
-
-
-    if (!filteredContacts.length) {
-      setContactNotFound(data)
-      return setNotFound(true)
-    }
-
-    setNotFound(false)
-    setContacts(filteredContacts)
-  }, [])
-
   return (
     <ContactContext.Provider
       value={{
@@ -134,9 +129,8 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
         createContact,
         updateContact,
         deleteContact,
-        searchContact,
-        notFound,
-        contactNotFound,
+        isAlphabeticalOrder,
+        setIsAlphabeticalOrder,
       }}
     >
       {children}

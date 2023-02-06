@@ -18,6 +18,12 @@ import { Input } from "../../components/Form/Input"
 import { UseGetScreenWidth } from "../../hook"
 import { useContact } from "../../contexts/ContactContext"
 
+interface IContactData {
+  name: string
+  phone: string
+  email: string
+}
+
 const createContactSchema = yup.object().shape({
   name: yup.string().required("name required"),
   phone: yup.string().required("phone required"),
@@ -26,7 +32,7 @@ const createContactSchema = yup.object().shape({
 
 const ModalCreateContact = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { createContact } = useContact()
+  const { createContact, loadContacts } = useContact()
 
   const [, width] = UseGetScreenWidth()
 
@@ -37,6 +43,12 @@ const ModalCreateContact = () => {
   } = useForm({
     resolver: yupResolver(createContactSchema),
   })
+
+  const handleCreate = (data: IContactData) => {
+    createContact(data)
+    onClose()
+    loadContacts()
+  }
 
   return (
     <>
@@ -55,7 +67,7 @@ const ModalCreateContact = () => {
         <ModalOverlay backdropFilter='blur(2px)' />
         <ModalContent
           as='form'
-          onSubmit={handleSubmit(createContact as SubmitHandler<FieldValues>)}
+          onSubmit={handleSubmit(handleCreate as SubmitHandler<FieldValues>)}
           borderRadius='12px'
           bgColor='gray.200'
           p='10px 5px 15px 5px'

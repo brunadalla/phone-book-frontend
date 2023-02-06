@@ -5,21 +5,23 @@ import {
   AccordionPanel,
   Box,
   HStack,
-  Button,
   VStack,
   Text,
 } from "@chakra-ui/react"
 import { BsCalendar, BsEnvelope, BsTelephone } from "react-icons/bs"
 import { HiOutlinePencilAlt, HiOutlineTrash } from "react-icons/hi"
+import { useContact } from "../../contexts/ContactContext"
 
 interface IContactProps {
+  id: string
   name: string
   phone: string
   email: string
   date: Date
 }
-export const CardMobile = ({ name, phone, email, date }: IContactProps) => {
+export const CardMobile = ({ id, name, phone, email, date }: IContactProps) => {
   const formatedDate = new Date(date)
+  const { deleteContact } = useContact()
 
   return (
     <Accordion allowToggle>
@@ -41,22 +43,23 @@ export const CardMobile = ({ name, phone, email, date }: IContactProps) => {
             </Box>
 
             <HStack>
-              <Button
+              <Box
                 p='0'
-                size='20'
+                
                 bgColor='transparent'
                 _hover={{ color: "green.800" }}
               >
                 <HiOutlinePencilAlt size='20' />
-              </Button>
-              <Button
+              </Box>
+              <Box
                 p='0'
-                size='20'
+                
                 bgColor='transparent'
                 _hover={{ color: "green.800" }}
+                onClick={() => deleteContact(id)}
               >
                 <HiOutlineTrash size='20' />
-              </Button>
+              </Box>
             </HStack>
           </AccordionButton>
         </h2>

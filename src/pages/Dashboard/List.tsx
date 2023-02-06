@@ -1,15 +1,9 @@
-import {
-  Button,
-  Flex,
-  Grid,
-  GridItem,
-  HStack,
-  Text,
-} from "@chakra-ui/react"
+import { Flex, Grid, GridItem, HStack, Text } from "@chakra-ui/react"
 
 import { CustomCard } from "../../components/Card"
 import { CardMobile } from "../../components/Card/CardMobile"
 import ModalCreateContact from "../../components/Modal/ModalCreateContact"
+import { useContact } from "../../contexts/ContactContext"
 import { UseGetScreenWidth } from "../../hook"
 
 interface IContact {
@@ -25,6 +19,7 @@ interface IContactListProps {
 }
 
 export const List = ({ contacts }: IContactListProps) => {
+  const { isAlphabeticalOrder, setIsAlphabeticalOrder } = useContact()
   const [, width] = UseGetScreenWidth()
 
   return (
@@ -37,46 +32,65 @@ export const List = ({ contacts }: IContactListProps) => {
         fontWeight='medium'
       >
         <HStack gap='12'>
-          <Text> Recent </Text>
-          <Text> A - B</Text>
+          <Text
+            color={isAlphabeticalOrder ? "gray.900" : "blue.600"}
+            _hover={{ color: "blue.700", cursor: "pointer" }}
+            onClick={() => setIsAlphabeticalOrder(false)}
+          >
+            {" "}
+            Recent{" "}
+          </Text>
+          <Text
+            color={isAlphabeticalOrder ? "blue.600" : "gray.900"}
+            _hover={{ color: "blue.700", cursor: "pointer" }}
+            onClick={() => setIsAlphabeticalOrder(true)}
+          >
+            {" "}
+            A - B
+          </Text>
         </HStack>
-        <ModalCreateContact/>
+        <ModalCreateContact />
       </HStack>
 
-      <Grid
-        h={["50vh", "50vh", "65vh", "65vh"]}
-        overflowY='scroll'
-        templateColumns={[
-          "repeat(1, 1fr)",
-          "repeat(1, 1fr)",
-          "repeat(4, 1fr)",
-          "repeat(4, 1fr)",
-        ]}
-        gap={["1", "1", "4", "4"]}
-      >
-        {contacts.map((contact) => (
-          <GridItem>
-            {width >= 768 ? (
+      {width < 768 ? (
+        <Flex
+          h='50vh'
+          overflowY='scroll'
+          gap='1'
+          flexDirection='column'
+          justifyContent='flex-start'
+        >
+          {contacts.map((contact) => (
+            <CardMobile
+              id={contact.id}
+              name={contact.name}
+              phone={contact.phone}
+              email={contact.email}
+              date={contact.createdAt}
+              key={contact.id}
+            />
+          ))}
+        </Flex>
+      ) : (
+        <Grid
+          h='65vh'
+          overflowY='scroll'
+          templateColumns='repeat(4, 1fr)'
+          gap='4'
+        >
+          {contacts.map((contact) => (
+            <GridItem key={contact.id}>
               <CustomCard
                 id={contact.id}
                 name={contact.name}
                 phone={contact.phone}
                 email={contact.email}
                 date={contact.createdAt}
-                key={contact.id}
               />
-            ) : (
-              <CardMobile
-                name={contact.name}
-                phone={contact.phone}
-                email={contact.email}
-                date={contact.createdAt}
-                key={contact.id}
-              />
-            )}
-          </GridItem>
-        ))}
-      </Grid>
+            </GridItem>
+          ))}
+        </Grid>
+      )}
     </Flex>
   )
 }
