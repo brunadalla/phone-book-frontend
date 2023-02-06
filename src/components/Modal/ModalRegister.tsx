@@ -85,7 +85,7 @@ const ModalRegister = () => {
           borderRadius='12px'
           bgColor='gray.200'
           p='10px 5px 15px 5px'
-          m={['4', '4', '6', '6']}
+          m={["4", "4", "6", "6"]}
           alignSelf='center'
         >
           <ModalHeader
@@ -154,7 +154,6 @@ const ModalRegister = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      
     </>
   )
 }

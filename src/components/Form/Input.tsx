@@ -1,13 +1,11 @@
 import {
   FormControl,
-  FormErrorMessage,
   FormLabel,
   Input as ChakraInput,
   InputProps as ChakraInputProps,
   InputLeftElement,
   InputGroup,
   InputRightElement,
-  Tooltip,
   HStack,
   Text,
 } from "@chakra-ui/react"
@@ -79,7 +77,16 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
           >
             {label}
           </FormLabel>
-          {error && <Text fontFamily='Nunito' color='red.600' fontSize='sm' fontWeight='semibold'> {error.message}</Text>}
+          {error && (
+            <Text
+              fontFamily='Nunito'
+              color='red.600'
+              fontSize='sm'
+              fontWeight='semibold'
+            >
+              {error.message}
+            </Text>
+          )}
         </HStack>
       )}
       <InputGroup mt='5px'>

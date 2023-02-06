@@ -43,17 +43,11 @@ export const CardMobile = ({ id, name, phone, email, date }: IContactProps) => {
             </Box>
 
             <HStack>
-              <Box
-                p='0'
-                
-                bgColor='transparent'
-                _hover={{ color: "green.800" }}
-              >
+              <Box p='0' bgColor='transparent' _hover={{ color: "green.800" }}>
                 <HiOutlinePencilAlt size='20' />
               </Box>
               <Box
                 p='0'
-                
                 bgColor='transparent'
                 _hover={{ color: "green.800" }}
                 onClick={() => deleteContact(id)}

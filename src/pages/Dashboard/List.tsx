@@ -1,8 +1,8 @@
 import { Flex, Grid, GridItem, HStack, Text } from "@chakra-ui/react"
 
+import ModalCreateContact from "../../components/Modal/ModalCreateContact"
 import { CustomCard } from "../../components/Card"
 import { CardMobile } from "../../components/Card/CardMobile"
-import ModalCreateContact from "../../components/Modal/ModalCreateContact"
 import { useContact } from "../../contexts/ContactContext"
 import { UseGetScreenWidth } from "../../hook"
 
@@ -37,15 +37,13 @@ export const List = ({ contacts }: IContactListProps) => {
             _hover={{ color: "blue.700", cursor: "pointer" }}
             onClick={() => setIsAlphabeticalOrder(false)}
           >
-            {" "}
-            Recent{" "}
+            Recent
           </Text>
           <Text
             color={isAlphabeticalOrder ? "blue.600" : "gray.900"}
             _hover={{ color: "blue.700", cursor: "pointer" }}
             onClick={() => setIsAlphabeticalOrder(true)}
           >
-            {" "}
             A - B
           </Text>
         </HStack>

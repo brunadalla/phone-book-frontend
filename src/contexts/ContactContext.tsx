@@ -50,7 +50,7 @@ const useContact = () => {
 
 const ContactProvider = ({ children }: IContactProviderProps) => {
   const { token } = useAuth()
-  
+
   const [contacts, setContacts] = useState<IContact[]>([])
   const [isAlphabeticalOrder, setIsAlphabeticalOrder] = useState(false)
 

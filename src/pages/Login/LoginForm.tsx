@@ -47,7 +47,6 @@ export const LoginForm = ({
             color='red.600'
             textAlign='left'
           >
-            {" "}
             {errors.mail}
           </Text>
         )}
@@ -62,7 +61,6 @@ export const LoginForm = ({
         />
         {errors.password && (
           <Text fontSize='md' fontFamily='Nunito' w='100%' color='red.600'>
-            {" "}
             {errors.password}
           </Text>
         )}

@@ -6,18 +6,19 @@ import {
   VStack,
 } from "@chakra-ui/react"
 
+import { useNavigate } from "react-router-dom"
+
 import { FieldValues, SubmitHandler } from "react-hook-form/dist/types"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
 import * as yup from "yup"
 
-import { UseGetScreenWidth } from "../../hook"
-import { useNavigate } from "react-router-dom"
-import { LoginForm } from "./LoginForm"
+import Background from "../../assets/background.png"
 import ModalRegister from "../../components/Modal/ModalRegister"
+import { UseGetScreenWidth } from "../../hook"
+import { LoginForm } from "./LoginForm"
 import { useAuth } from "../../contexts/AuthContext"
 import { Header } from "../../components/Header"
-import Background from "../../assets/background.png"
 
 const { toast } = createStandaloneToast()
 
@@ -51,7 +52,7 @@ export const Login = () => {
       position: "top-right",
       duration: 120000,
       isClosable: false,
-      status: 'info'
+      status: "info",
     })
     signIn(data)
       .then(() => {
