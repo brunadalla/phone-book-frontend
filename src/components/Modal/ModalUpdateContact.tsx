@@ -7,7 +7,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react"
 
@@ -16,75 +15,68 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 
 import { Input } from "../../components/Form/Input"
-import { UseGetScreenWidth } from "../../hook"
 import { useContact } from "../../contexts/ContactContext"
-import { useState } from "react"
+import { HiOutlinePencilAlt } from "react-icons/hi"
 
 interface IContactData {
+  name?: string
+  phone?: string
+  email?: string
+}
+
+interface IUpdateContactProps {
+  id: string
   name: string
   phone: string
   email: string
 }
 
-const createContactSchema = yup.object().shape({
-  name: yup.string().required("name required"),
-  phone: yup.string().required("phone required"),
-  email: yup.string().required("email required").email("invalid email"),
+const updateContactSchema = yup.object().shape({
+  name: yup.string(),
+  phone: yup.string(),
+  email: yup.string().email("invalid email"),
 })
 
-const ModalCreateContact = () => {
+const ModalUpdateContact = ({
+  id,
+  name,
+  phone,
+  email,
+}: IUpdateContactProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { createContact, loadContacts, contacts } = useContact()
-
-  const [error, setError] = useState("")
-
-  const [, width] = UseGetScreenWidth()
+  const { updateContact, loadContacts } = useContact()
 
   const {
     formState: { errors },
     register,
     handleSubmit,
   } = useForm({
-    resolver: yupResolver(createContactSchema),
+    resolver: yupResolver(updateContactSchema),
   })
 
-  const handleCreate = (data: IContactData) => {
-    const emailAlreadyExists = contacts.find(
-      (contact) => contact.email === data.email
-    )
-    const phoneAlreadyExists = contacts.find(
-      (contact) => contact.phone === data.phone
-    )
-
-    if (emailAlreadyExists) {
-      setError(`${emailAlreadyExists.name} already has this email`)
-    } else if (phoneAlreadyExists) {
-      setError(`${phoneAlreadyExists.name} already has this phone`)
-    } else {
-      createContact(data)
-      onClose()
-      loadContacts()
-    }
+  const handleUpdate = (data: IContactData) => {
+    updateContact(id, data)
+    onClose()
+    loadContacts()
   }
 
   return (
     <>
       <Button
+        p='0'
+        bgColor='transparent'
+        _hover={{ color: "green.800" }}
         onClick={onOpen}
-        fontFamily='Nunito'
-        fontWeight='bold'
-        p={width >= 768 ? "6" : "none"}
-        children={width >= 768 ? "+ New Contact" : "+ New"}
-        h='100%'
-        bgColor='green.600'
-        _hover={{ bgColor: "green.800", color: "white" }}
-      />
+        size='20'
+      >
+        <HiOutlinePencilAlt size='20' />
+      </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay backdropFilter='blur(2px)' />
         <ModalContent
           as='form'
-          onSubmit={handleSubmit(handleCreate as SubmitHandler<FieldValues>)}
+          onSubmit={handleSubmit(handleUpdate as SubmitHandler<FieldValues>)}
           borderRadius='12px'
           bgColor='gray.200'
           p='10px 5px 15px 5px'
@@ -97,43 +89,31 @@ const ModalCreateContact = () => {
             fontWeight={600}
             fontFamily='Poppins'
           >
-            Add new Contact
+            Update Contact
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6} display='flex' flexDirection='column' gap='10px'>
             <Input
               label='Name'
-              placeholder='Louis Smith'
+              defaultValue={name}
               error={errors.name}
               {...register("name")}
             />
 
             <Input
               label='Phone'
-              placeholder='5511998989898'
+              defaultValue={phone}
               error={errors.phone}
               {...register("phone")}
             />
 
             <Input
               label='Email'
-              placeholder='louis@mail.com'
+              defaultValue={email}
               type='email'
               error={errors.email}
               {...register("email")}
             />
-
-            {error && (
-              <Text
-                fontFamily='Nunito'
-                color='red.600'
-                fontSize='sm'
-                fontWeight='semibold'
-                pt='2'
-              >
-                {error}
-              </Text>
-            )}
           </ModalBody>
           <ModalFooter display='flex' flexDirection='column' gap='10px'>
             <Button
@@ -146,7 +126,7 @@ const ModalCreateContact = () => {
               fontSize='md'
               fontWeight='semibold'
             >
-              Add
+              Update
             </Button>
             <Button
               onClick={onClose}
@@ -165,4 +145,4 @@ const ModalCreateContact = () => {
   )
 }
 
-export default ModalCreateContact
+export default ModalUpdateContact

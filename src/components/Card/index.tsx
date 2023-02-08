@@ -9,8 +9,9 @@ import {
   Button,
 } from "@chakra-ui/react"
 import { BsTelephone, BsEnvelope, BsCalendar } from "react-icons/bs"
-import { HiOutlinePencilAlt, HiOutlineTrash } from "react-icons/hi"
+import { HiOutlineTrash } from "react-icons/hi"
 import { useContact } from "../../contexts/ContactContext"
+import ModalUpdateContact from "../Modal/ModalUpdateContact"
 
 interface IContactProps {
   id: string
@@ -36,14 +37,7 @@ export const CustomCard = ({ id, name, phone, email, date }: IContactProps) => {
         </Heading>
 
         <HStack>
-          <Button
-            p='0'
-            size='20'
-            bgColor='transparent'
-            _hover={{ color: "green.800" }}
-          >
-            <HiOutlinePencilAlt size='20' />
-          </Button>
+          <ModalUpdateContact id={id} name={name} phone={phone} email={email} />
           <Button
             p='0'
             size='20'

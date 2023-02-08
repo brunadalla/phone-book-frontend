@@ -90,7 +90,6 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => setContacts((oldContacts) => [...oldContacts, res.data]))
       .catch((err) => console.log(err.message))
   }
 
@@ -101,7 +100,6 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => setContacts((oldContacts) => [...oldContacts, res.data]))
       .catch((err) => console.log(err))
   }
 
