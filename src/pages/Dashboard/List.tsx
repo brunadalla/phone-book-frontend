@@ -1,4 +1,13 @@
-import { Flex, Grid, GridItem, HStack, Text } from "@chakra-ui/react"
+import {
+  Box,
+  Flex,
+  Grid,
+  GridItem,
+  HStack,
+  Skeleton,
+  Text,
+  VStack,
+} from "@chakra-ui/react"
 
 import ModalCreateContact from "../../components/Modal/ModalCreateContact"
 import { CustomCard } from "../../components/Card"
@@ -19,8 +28,10 @@ interface IContactListProps {
 }
 
 export const List = ({ contacts }: IContactListProps) => {
-  const { isAlphabeticalOrder, setIsAlphabeticalOrder } = useContact()
+  const { isAlphabeticalOrder, setIsAlphabeticalOrder, isLoading } =
+    useContact()
   const [, width] = UseGetScreenWidth()
+  const arr = [1, 2, 3]
 
   return (
     <Flex w='100%' flexDirection='column' gap='4' pt='4' color='gray.900'>
@@ -58,17 +69,25 @@ export const List = ({ contacts }: IContactListProps) => {
           flexDirection='column'
           justifyContent='flex-start'
         >
-          {contacts.map((contact) => (
-            <CardMobile
-              id={contact.id}
-              name={contact.name}
-              phone={contact.phone}
-              email={contact.email}
-              date={contact.createdAt}
-              key={contact.id}
-            />
-          ))}
+          {isLoading
+            ? arr.map(() => <Skeleton height='40px' borderRadius='8px' />)
+            : contacts.map((contact) => (
+                <CardMobile
+                  id={contact.id}
+                  name={contact.name}
+                  phone={contact.phone}
+                  email={contact.email}
+                  date={contact.createdAt}
+                  key={contact.id}
+                />
+              ))}
         </Flex>
+      ) : isLoading ? (
+        <HStack gap='1'>
+          {arr.map(() => (
+            <Skeleton h='200px' w='24%' borderRadius='8px'/>
+          ))}
+        </HStack>
       ) : (
         <Grid
           h='65vh'

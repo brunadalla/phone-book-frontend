@@ -34,6 +34,8 @@ interface SignInCredentials {
 interface AuthContextData {
   user: User
   token: string
+  isLoading: boolean
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
   signIn: (credentials: SignInCredentials) => Promise<void>
   signOut: () => void
 }
@@ -50,6 +52,7 @@ const useAuth = () => {
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem("@token")
     const user = localStorage.getItem("@user")
@@ -93,6 +96,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       value={{
         token: data.token,
         user: data.user,
+        isLoading,
+        setIsLoading,
         signIn,
         signOut,
       }}

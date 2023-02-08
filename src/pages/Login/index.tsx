@@ -19,6 +19,8 @@ import { UseGetScreenWidth } from "../../hook"
 import { LoginForm } from "./LoginForm"
 import { useAuth } from "../../contexts/AuthContext"
 import { Header } from "../../components/Header"
+import { Toaster } from "react-hot-toast"
+import { ToastLoadingError } from "../../components/Toast"
 
 const { toast } = createStandaloneToast()
 
@@ -35,7 +37,7 @@ interface SignInData {
 export const Login = () => {
   const navigate = useNavigate()
 
-  const { signIn } = useAuth()
+  const { signIn, setIsLoading } = useAuth()
 
   const {
     formState: { errors },
@@ -46,13 +48,12 @@ export const Login = () => {
   })
 
   const handleSignIn = (data: SignInData) => {
+    setIsLoading(true)
     toast({
-      title: "Loading",
-      description: "Wait until we finish it!",
       position: "top-right",
       duration: 120000,
       isClosable: false,
-      status: "info",
+      render: ToastLoadingError
     })
     signIn(data)
       .then(() => {
@@ -60,14 +61,10 @@ export const Login = () => {
         navigate("/dashboard")
       })
       .catch((err) => {
-        toast.closeAll()
-        toast({
-          title: "Oops!",
-          description: "Something went wrong :(",
-          position: "top-right",
-          isClosable: true,
-          status: "error",
-        })
+        setIsLoading(false)
+        setTimeout(() => {
+          toast.closeAll()
+        }, 3000)
       })
   }
 
@@ -126,6 +123,7 @@ export const Login = () => {
           <ModalRegister />
         </Flex>
       </VStack>
+      <Toaster />
     </Flex>
   )
 }

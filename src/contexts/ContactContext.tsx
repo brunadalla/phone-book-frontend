@@ -28,11 +28,13 @@ interface IContact {
 }
 
 interface IContactData {
+  isLoading: boolean
   contacts: IContact[]
   createContact: (data: IDataProps) => Promise<void>
   loadContacts: () => Promise<void>
   deleteContact: (contactId: string) => Promise<void>
   updateContact: (contactId: string, data: IDataUpProps) => Promise<void>
+  searchContact: (value: string) => Promise<void>
   isAlphabeticalOrder: boolean
   setIsAlphabeticalOrder: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -51,10 +53,12 @@ const useContact = () => {
 const ContactProvider = ({ children }: IContactProviderProps) => {
   const { token } = useAuth()
 
+  const [isLoading, setIsLoading] = useState(false)
   const [contacts, setContacts] = useState<IContact[]>([])
   const [isAlphabeticalOrder, setIsAlphabeticalOrder] = useState(false)
 
   const loadContacts = async () => {
+    setIsLoading(true)
     await api
       .get(`/contacts`, {
         headers: {
@@ -79,54 +83,103 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
                 }
               })
         )
+        setIsLoading(false)
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        setIsLoading(false)
+      })
   }
 
   const createContact = async (data: IDataProps) => {
+    setIsLoading(true)
     await api
       .post(`/contacts`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      .catch((err) => console.log(err.message))
+      .then(() => setIsLoading(false))
+      .catch((err) => {
+        console.log(err)
+        setIsLoading(false)
+      })
   }
 
   const updateContact = async (contactId: string, data: IDataUpProps) => {
+    setIsLoading(true)
     await api
       .patch(`/contacts/${contactId}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      .catch((err) => console.log(err))
+      .then(() => setIsLoading(false))
+      .catch((err) => {
+        console.log(err)
+        setIsLoading(false)
+      })
   }
 
   const deleteContact = async (contactId: string) => {
+    setIsLoading(true)
     await api
       .delete(`/contacts/${contactId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(() => {
+      .then((res) => {
         const filteredContacts = contacts.filter(
           (contact) => contact.id !== contactId
         )
         setContacts(filteredContacts)
+        setIsLoading(false)
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        setIsLoading(false)
+      })
+  }
+
+  const searchContact = async (value: string) => {
+    setIsLoading(true)
+    await api
+      .get(`/contacts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        if (!value) {
+          loadContacts()
+        } else {
+          const filteredContacts = contacts.filter(
+            (contact) =>
+              contact.name.includes(value) ||
+              contact.phone.includes(value) ||
+              contact.email.includes(value)
+          )
+          setContacts(filteredContacts)
+        }
+        setIsLoading(false)
+      })
+      .catch((err) => {
+        console.log(err)
+        setIsLoading(false)
+      })
   }
 
   return (
     <ContactContext.Provider
       value={{
+        isLoading,
         contacts,
         loadContacts,
         createContact,
         updateContact,
         deleteContact,
+        searchContact,
         isAlphabeticalOrder,
         setIsAlphabeticalOrder,
       }}
