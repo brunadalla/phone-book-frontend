@@ -1,29 +1,39 @@
-import {
-  DeepMap,
-  FieldError,
-  FieldValues,
-  UseFormRegister,
-} from "react-hook-form"
+import { useForm } from "react-hook-form"
+import { FieldValues, SubmitHandler } from "react-hook-form/dist/types"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
 
-import { Button, Flex, Text, VStack } from "@chakra-ui/react"
+import { Button, Flex, VStack } from "@chakra-ui/react"
 import { FaEnvelope, FaLock } from "react-icons/fa"
 
 import { Input } from "../../components/Form/Input"
 
+interface SignInData {
+    email: string
+    password: string
+  }
+
 interface LoginFormProps {
-  handleSignIn: () => void
-  errors: DeepMap<FieldValues, FieldError>
-  register: UseFormRegister<FieldValues>
+    handleSignIn: (data: SignInData) => void
 }
 
-export const LoginForm = ({
-  handleSignIn,
-  register,
-  errors,
-}: LoginFormProps) => {
+const signInSchema = yup.object().shape({
+  email: yup.string().required("Email required").email("Invalid email"),
+  password: yup.string().required("Password required"),
+})
+
+export const LoginForm = ({ handleSignIn }: LoginFormProps) => {
+  const {
+    formState: { errors },
+    register,
+    handleSubmit,
+  } = useForm({
+    resolver: yupResolver(signInSchema),
+  })
+
   return (
     <Flex
-      onSubmit={handleSignIn}
+      onSubmit={handleSubmit(handleSignIn as SubmitHandler<FieldValues>)}
       as='form'
       w='100%'
       h='50%'
@@ -39,18 +49,6 @@ export const LoginForm = ({
           error={errors.email}
           {...register("email")}
         />
-        {errors.email && (
-          <Text
-            fontSize='md'
-            fontFamily='Nunito'
-            w='100%'
-            color='red.600'
-            textAlign='left'
-          >
-            {errors.mail}
-          </Text>
-        )}
-
         <Input
           placeholder='Write your password'
           icon={FaLock}
@@ -59,11 +57,6 @@ export const LoginForm = ({
           error={errors.password}
           {...register("password")}
         />
-        {errors.password && (
-          <Text fontSize='md' fontFamily='Nunito' w='100%' color='red.600'>
-            {errors.password}
-          </Text>
-        )}
       </VStack>
 
       <Button

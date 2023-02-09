@@ -7,27 +7,19 @@ import {
 } from "@chakra-ui/react"
 
 import { useNavigate } from "react-router-dom"
-
-import { FieldValues, SubmitHandler } from "react-hook-form/dist/types"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { useForm } from "react-hook-form"
-import * as yup from "yup"
+import { Toaster } from "react-hot-toast"
 
 import Background from "../../assets/background.png"
-import ModalRegister from "../../components/Modal/ModalRegister"
 import { UseGetScreenWidth } from "../../hook"
-import { LoginForm } from "./LoginForm"
-import { useAuth } from "../../contexts/AuthContext"
+
 import { Header } from "../../components/Header"
-import { Toaster } from "react-hot-toast"
+import { LoginForm } from "./LoginForm"
 import { ToastLoadingError } from "../../components/Toast"
+import ModalRegister from "../../components/Modal/ModalRegister"
+
+import { useAuth } from "../../contexts/AuthContext"
 
 const { toast } = createStandaloneToast()
-
-const signInSchema = yup.object().shape({
-  email: yup.string().required("Email required").email("Invalid email"),
-  password: yup.string().required("Password required"),
-})
 
 interface SignInData {
   email: string
@@ -40,14 +32,6 @@ export const Login = () => {
 
   const [, width] = UseGetScreenWidth()
 
-  const {
-    formState: { errors },
-    register,
-    handleSubmit,
-  } = useForm({
-    resolver: yupResolver(signInSchema),
-  })
-
   const handleSignIn = (data: SignInData) => {
     setIsLoading(true)
     toast({
@@ -59,7 +43,7 @@ export const Login = () => {
     signIn(data)
       .then(() => {
         toast.closeAll()
-        navigate("/dashboard")
+        navigate("/dashboard", { replace: true })
       })
       .catch((err) => {
         setIsLoading(false)
@@ -104,13 +88,7 @@ export const Login = () => {
       >
         <Header />
 
-        <LoginForm
-          errors={errors}
-          handleSignIn={handleSubmit(
-            handleSignIn as SubmitHandler<FieldValues>
-          )}
-          register={register}
-        />
+        <LoginForm handleSignIn={handleSignIn} />
         <Flex
           flexDirection='column'
           fontSize='lg'

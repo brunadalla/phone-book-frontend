@@ -29,7 +29,7 @@ export const ToastLoadingError = () => {
       ) : (
         <>
           <MdCancel color='red' size='23'/>
-          <Text fontWeight='bold'> Something went wrong! </Text>
+          <Text fontWeight='bold'> Invalid email or password! </Text>
         </>
       )}
     </Box>
