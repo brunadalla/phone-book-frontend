@@ -16,17 +16,10 @@ import { useNavigate } from "react-router-dom"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 
-import { Input } from "../../components/Form/Input"
 import { api } from "../../services/api"
+import { Input } from "../../components/Form/Input"
+import { ISignUpData } from "../../interfaces/UserInterfaces"
 import { signUpSchema } from "../../validators"
-
-
-interface ISignupData {
-  name: string
-  phone: string
-  email: string
-  password: string
-}
 
 const ModalRegister = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -46,7 +39,7 @@ const ModalRegister = () => {
     phone,
     email,
     password,
-  }: ISignupData) => {
+  }: ISignUpData) => {
     await api
       .post("/users", { name, phone, email, password })
       .then((res) => {

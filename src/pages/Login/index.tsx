@@ -6,25 +6,20 @@ import {
   VStack,
 } from "@chakra-ui/react"
 
-import { useNavigate } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 import Background from "../../assets/background.png"
-import { UseGetScreenWidth } from "../../hook"
-
-import { Header } from "../../components/Header"
-import { LoginForm } from "./LoginForm"
-import { ToastLoadingError } from "../../components/Toast"
 import ModalRegister from "../../components/Modal/ModalRegister"
 
+import { Header } from "../../components/Header"
 import { useAuth } from "../../contexts/AuthContext"
+import { LoginForm } from "./LoginForm"
+import { ISignInData } from "../../interfaces/UserInterfaces"
+import { ToastLoadingError } from "../../components/Toast"
+import { UseGetScreenWidth } from "../../hook"
 
 const { toast } = createStandaloneToast()
-
-interface SignInData {
-  email: string
-  password: string
-}
 
 export const Login = () => {
   const navigate = useNavigate()
@@ -32,7 +27,7 @@ export const Login = () => {
 
   const [, width] = UseGetScreenWidth()
 
-  const handleSignIn = (data: SignInData) => {
+  const handleSignIn = (data: ISignInData) => {
     setIsLoading(true)
     toast({
       position: width >= 768 ? "top-right" : "top",

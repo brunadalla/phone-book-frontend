@@ -17,27 +17,16 @@ import { Input } from "../../components/Form/Input"
 import { useContact } from "../../contexts/ContactContext"
 import { HiOutlinePencilAlt } from "react-icons/hi"
 import { updateContactSchema } from "../../validators"
+import { IContactUpdateProps } from "../../interfaces/ContactInterfaces"
 
-interface IContactData {
-  name?: string
-  phone?: string
-  email?: string
-}
-
-interface IUpdateContactProps {
+interface IData {
   id: string
   name: string
   phone: string
   email: string
 }
 
-
-const ModalUpdateContact = ({
-  id,
-  name,
-  phone,
-  email,
-}: IUpdateContactProps) => {
+const ModalUpdateContact = ({ id, name, phone, email }: IData) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { updateContact, loadContacts } = useContact()
 
@@ -49,7 +38,7 @@ const ModalUpdateContact = ({
     resolver: yupResolver(updateContactSchema),
   })
 
-  const handleUpdate = (data: IContactData) => {
+  const handleUpdate = (data: IContactUpdateProps) => {
     updateContact(id, data)
     onClose()
     loadContacts()

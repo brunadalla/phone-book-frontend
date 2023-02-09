@@ -1,23 +1,14 @@
-import { createContext, ReactNode, useContext } from "react"
+import { createContext, useContext } from "react"
 
 import { useAuth } from "./AuthContext"
 import { api } from "../services/api"
+import {
+  IProviderProps,
+  IUserContext,
+  IUserUpdateProps,
+} from "../interfaces/UserInterfaces"
 
-interface IUserProviderProps {
-  children: ReactNode
-}
-
-interface IDataProps {
-  name?: string
-  phone?: string
-  password?: string
-}
-
-interface IUserData {
-  updateUser: (data: IDataProps) => void
-  deleteUser: () => void
-}
-const UserContext = createContext<IUserData>({} as IUserData)
+const UserContext = createContext<IUserContext>({} as IUserContext)
 
 const useUser = () => {
   const context = useContext(UserContext)
@@ -28,12 +19,12 @@ const useUser = () => {
   return context
 }
 
-const UserProvider = ({ children }: IUserProviderProps) => {
+const UserProvider = ({ children }: IProviderProps) => {
   const { signOut, token, user } = useAuth()
 
   const userId = user?.id
 
-  const updateUser = async (data: IDataProps) => {
+  const updateUser = async (data: IUserUpdateProps) => {
     await api
       .patch(`/users/${userId}`, data, {
         headers: {

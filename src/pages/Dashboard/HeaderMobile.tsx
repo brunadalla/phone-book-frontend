@@ -12,9 +12,9 @@ import {
 
 import { useNavigate } from "react-router-dom"
 
-import { BsTelephone, BsEnvelope } from "react-icons/bs"
 import { BiLogOut } from "react-icons/bi"
 import { HiOutlineMenu } from "react-icons/hi"
+import { BsTelephone, BsEnvelope } from "react-icons/bs"
 
 import { useAuth } from "../../contexts/AuthContext"
 

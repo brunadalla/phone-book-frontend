@@ -1,20 +1,16 @@
 import { useForm } from "react-hook-form"
-import { FieldValues, SubmitHandler } from "react-hook-form/dist/types"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { FieldValues, SubmitHandler } from "react-hook-form/dist/types"
 
-import { Button, Flex, VStack } from "@chakra-ui/react"
 import { FaEnvelope, FaLock } from "react-icons/fa"
+import { Button, Flex, VStack } from "@chakra-ui/react"
 
 import { Input } from "../../components/Form/Input"
+import { ISignInData } from "../../interfaces/UserInterfaces"
 import { signInSchema } from "../../validators"
 
-interface SignInData {
-    email: string
-    password: string
-  }
-
 interface LoginFormProps {
-    handleSignIn: (data: SignInData) => void
+  handleSignIn: (data: ISignInData) => void
 }
 
 export const LoginForm = ({ handleSignIn }: LoginFormProps) => {

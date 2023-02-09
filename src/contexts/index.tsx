@@ -1,14 +1,10 @@
-import { ReactNode } from "react"
+import { IProviderProps } from "../interfaces/UserInterfaces"
 
 import { AuthProvider } from "./AuthContext"
 import { ContactProvider } from "./ContactContext"
 import { UserProvider } from "./UserContext"
 
-interface AppProviderProps {
-  children: ReactNode
-}
-
-export const AppProvider = ({ children }: AppProviderProps) => (
+export const AppProvider = ({ children }: IProviderProps) => (
   <AuthProvider>
     <UserProvider>
       <ContactProvider>{children}</ContactProvider>

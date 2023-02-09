@@ -1,6 +1,7 @@
 import { Button, Flex, FormControl, Heading, Input } from "@chakra-ui/react"
 import { useState } from "react"
 import { BiSearch } from "react-icons/bi"
+
 import { useContact } from "../../contexts/ContactContext"
 
 export const Filter = () => {

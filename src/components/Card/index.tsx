@@ -10,19 +10,19 @@ import {
 } from "@chakra-ui/react"
 import { BsTelephone, BsEnvelope, BsCalendar } from "react-icons/bs"
 import { HiOutlineTrash } from "react-icons/hi"
+
 import { useContact } from "../../contexts/ContactContext"
+import { IContactData } from "../../interfaces/ContactInterfaces"
 import ModalUpdateContact from "../Modal/ModalUpdateContact"
 
-interface IContactProps {
-  id: string
-  name: string
-  phone: string
-  email: string
-  date: Date
-}
-
-export const CustomCard = ({ id, name, phone, email, date }: IContactProps) => {
-  const formatedDate = new Date(date)
+export const CustomCard = ({
+  id,
+  name,
+  phone,
+  email,
+  createdAt,
+}: IContactData) => {
+  const formatedDate = new Date(createdAt)
   const { deleteContact } = useContact()
 
   return (

@@ -1,48 +1,16 @@
-import { createContext, ReactNode, useContext, useState } from "react"
-import { createStandaloneToast } from "@chakra-ui/toast"
+import { createContext, useContext, useState } from "react"
+import {
+  IContactContext,
+  IContactCreateProps,
+  IContactData,
+  IContactUpdateProps,
+  IProviderProps,
+} from "../interfaces/ContactInterfaces"
 
 import { api } from "../services/api"
 import { useAuth } from "./AuthContext"
 
-interface IContactProviderProps {
-  children: ReactNode
-}
-
-interface IDataProps {
-  name: string
-  phone: string
-  email: string
-}
-
-interface IDataUpProps {
-  name?: string
-  phone?: string
-  email?: string
-}
-
-interface IContact {
-  id: string
-  name: string
-  phone: string
-  email: string
-  createdAt: Date
-}
-
-interface IContactData {
-  isLoading: boolean
-  contacts: IContact[]
-  createContact: (data: IDataProps) => Promise<void>
-  loadContacts: () => Promise<void>
-  deleteContact: (contactId: string) => Promise<void>
-  updateContact: (contactId: string, data: IDataUpProps) => Promise<void>
-  searchContact: (value: string) => Promise<void>
-  isAlphabeticalOrder: boolean
-  setIsAlphabeticalOrder: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-const { toast } = createStandaloneToast()
-
-const ContactContext = createContext<IContactData>({} as IContactData)
+const ContactContext = createContext<IContactContext>({} as IContactContext)
 
 const useContact = () => {
   const context = useContext(ContactContext)
@@ -53,12 +21,12 @@ const useContact = () => {
   return context
 }
 
-const ContactProvider = ({ children }: IContactProviderProps) => {
+const ContactProvider = ({ children }: IProviderProps) => {
   const { token } = useAuth()
 
   const [isLoading, setIsLoading] = useState(false)
-  const [contacts, setContacts] = useState<IContact[]>([])
-  
+  const [contacts, setContacts] = useState<IContactData[]>([])
+
   const [isAlphabeticalOrder, setIsAlphabeticalOrder] = useState(false)
 
   const loadContacts = async () => {
@@ -72,14 +40,14 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
       .then((res) => {
         setContacts(
           isAlphabeticalOrder
-            ? res.data.sort((a: IContact, b: IContact) => {
+            ? res.data.sort((a: IContactData, b: IContactData) => {
                 if (a.name < b.name) {
                   return -1
                 } else {
                   return 1
                 }
               })
-            : res.data.sort((a: IContact, b: IContact) => {
+            : res.data.sort((a: IContactData, b: IContactData) => {
                 if (a.createdAt > b.createdAt) {
                   return -1
                 } else {
@@ -95,7 +63,7 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
       })
   }
 
-  const createContact = async (data: IDataProps) => {
+  const createContact = async (data: IContactCreateProps) => {
     setIsLoading(true)
     await api
       .post(`/contacts`, data, {
@@ -110,7 +78,10 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
       })
   }
 
-  const updateContact = async (contactId: string, data: IDataUpProps) => {
+  const updateContact = async (
+    contactId: string,
+    data: IContactUpdateProps
+  ) => {
     setIsLoading(true)
     await api
       .patch(`/contacts/${contactId}`, data, {
@@ -210,12 +181,12 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
       value={{
         isLoading,
         contacts,
+        isAlphabeticalOrder,
         loadContacts,
         createContact,
         updateContact,
         deleteContact,
         searchContact,
-        isAlphabeticalOrder,
         setIsAlphabeticalOrder,
       }}
     >

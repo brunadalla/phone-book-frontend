@@ -10,21 +10,16 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react"
+import { useState } from "react"
 
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 
 import { Input } from "../../components/Form/Input"
-import { UseGetScreenWidth } from "../../hook"
 import { useContact } from "../../contexts/ContactContext"
-import { useState } from "react"
+import { UseGetScreenWidth } from "../../hook"
 import { createContactSchema } from "../../validators"
-
-interface IContactData {
-  name: string
-  phone: string
-  email: string
-}
+import { IContactCreateProps } from "../../interfaces/ContactInterfaces"
 
 const ModalCreateContact = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -42,7 +37,7 @@ const ModalCreateContact = () => {
     resolver: yupResolver(createContactSchema),
   })
 
-  const handleCreate = (data: IContactData) => {
+  const handleCreate = (data: IContactCreateProps) => {
     const emailAlreadyExists = contacts.find(
       (contact) => contact.email === data.email
     )

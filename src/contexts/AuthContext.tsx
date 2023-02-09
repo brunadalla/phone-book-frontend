@@ -1,46 +1,15 @@
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useState,
-} from "react"
-
+import { createContext, useCallback, useContext, useState } from "react"
 import jwt_decode from "jwt-decode"
 
+import {
+  IAuthContextData,
+  IAuthState,
+  IProviderProps,
+  ISignInData,
+} from "../interfaces/UserInterfaces"
 import { api } from "../services/api"
 
-interface AuthProviderProps {
-  children: ReactNode
-}
-
-interface User {
-  id: string
-  name: string
-  email: string
-  phone: string
-}
-
-interface AuthState {
-  user: User
-  token: string
-}
-
-interface SignInCredentials {
-  email: string
-  password: string
-}
-
-interface AuthContextData {
-  user: User
-  token: string
-  isLoading: boolean
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
-  signIn: (credentials: SignInCredentials) => Promise<void>
-  signOut: () => void
-}
-
-const AuthContext = createContext<AuthContextData>({} as AuthContextData)
+const AuthContext = createContext<IAuthContextData>({} as IAuthContextData)
 
 const useAuth = () => {
   const context = useContext(AuthContext)
@@ -51,9 +20,9 @@ const useAuth = () => {
   return context
 }
 
-const AuthProvider = ({ children }: AuthProviderProps) => {
+const AuthProvider = ({ children }: IProviderProps) => {
   const [isLoading, setIsLoading] = useState(false)
-  const [data, setData] = useState<AuthState>(() => {
+  const [data, setData] = useState<IAuthState>(() => {
     const token = localStorage.getItem("@token")
     const user = localStorage.getItem("@user")
 
@@ -61,10 +30,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       return { token, user: JSON.parse(user) }
     }
 
-    return {} as AuthState
+    return {} as IAuthState
   })
 
-  const signIn = useCallback(async ({ email, password }: SignInCredentials) => {
+  const signIn = useCallback(async ({ email, password }: ISignInData) => {
     const response = await api.post("/login", { email, password })
     const { token } = response.data
 
@@ -88,7 +57,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem("@token")
     localStorage.removeItem("@user")
 
-    setData({} as AuthState)
+    setData({} as IAuthState)
   }, [])
 
   return (
