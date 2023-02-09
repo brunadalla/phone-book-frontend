@@ -6,7 +6,6 @@ import {
   VStack,
 } from "@chakra-ui/react"
 
-import { Toaster } from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 
 import Background from "../../assets/background.png"
@@ -95,7 +94,6 @@ export const Login = () => {
           <ModalRegister />
         </Flex>
       </VStack>
-      <Toaster />
     </Flex>
   )
 }
