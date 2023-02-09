@@ -66,6 +66,7 @@ const ModalRegister = () => {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay backdropFilter='blur(2px)' />
+
         <ModalContent
           as='form'
           onSubmit={handleSubmit(handleSignup as SubmitHandler<FieldValues>)}

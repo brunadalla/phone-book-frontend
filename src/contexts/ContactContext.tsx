@@ -71,7 +71,10 @@ const ContactProvider = ({ children }: IProviderProps) => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(() => setIsLoading(false))
+      .then(() => {
+        setIsLoading(false)
+        loadContacts()
+      })
       .catch((err) => {
         console.log(err)
         setIsLoading(false)
@@ -89,7 +92,10 @@ const ContactProvider = ({ children }: IProviderProps) => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(() => setIsLoading(false))
+      .then(() => {
+        setIsLoading(false)
+        loadContacts()
+      })
       .catch((err) => {
         console.log(err)
         setIsLoading(false)
@@ -105,11 +111,8 @@ const ContactProvider = ({ children }: IProviderProps) => {
         },
       })
       .then((res) => {
-        const filteredContacts = contacts.filter(
-          (contact) => contact.id !== contactId
-        )
-        setContacts(filteredContacts)
         setIsLoading(false)
+        loadContacts()
       })
       .catch((err) => {
         console.log(err)
@@ -131,42 +134,13 @@ const ContactProvider = ({ children }: IProviderProps) => {
         } else {
           const filteredContacts = contacts.filter(
             (contact) =>
-              contact.name
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .toLowerCase()
-                .includes(
-                  value
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "")
-                    .toLowerCase()
-                ) ||
-              contact.phone
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .toLowerCase()
-                .includes(
-                  value
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "")
-                    .toLowerCase()
-                ) ||
-              contact.email
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .toLowerCase()
-                .includes(
-                  value
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "")
-                    .toLowerCase()
-                )
+              contact.name.includes(value)  ||
+              contact.phone.includes(value) ||
+              contact.email.includes(value)
           )
-          if (!filteredContacts) {
-            loadContacts()
-          } else {
+          
             setContacts(filteredContacts)
-          }
+          
         }
         setIsLoading(false)
       })
