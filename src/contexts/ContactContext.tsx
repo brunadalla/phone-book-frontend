@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from "react"
+import { createStandaloneToast } from "@chakra-ui/toast"
 
 import { api } from "../services/api"
 import { useAuth } from "./AuthContext"
@@ -39,6 +40,8 @@ interface IContactData {
   setIsAlphabeticalOrder: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+const { toast } = createStandaloneToast()
+
 const ContactContext = createContext<IContactData>({} as IContactData)
 
 const useContact = () => {
@@ -55,6 +58,7 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [contacts, setContacts] = useState<IContact[]>([])
+  
   const [isAlphabeticalOrder, setIsAlphabeticalOrder] = useState(false)
 
   const loadContacts = async () => {
@@ -187,7 +191,11 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
                     .toLowerCase()
                 )
           )
-          setContacts(filteredContacts)
+          if (!filteredContacts) {
+            loadContacts()
+          } else {
+            setContacts(filteredContacts)
+          }
         }
         setIsLoading(false)
       })

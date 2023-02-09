@@ -82,8 +82,8 @@ export const List = ({ contacts }: IContactListProps) => {
         </Flex>
       ) : isLoading ? (
         <HStack gap='1'>
-          {arr.map(() => (
-            <Skeleton h='200px' w='24%' borderRadius='8px'/>
+          {arr.map((_, index) => (
+            <Skeleton h='200px' w='24%' borderRadius='8px' key={index}/>
           ))}
         </HStack>
       ) : (

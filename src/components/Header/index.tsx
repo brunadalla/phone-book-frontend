@@ -1,4 +1,4 @@
-import { Flex, Heading, HStack, Text } from "@chakra-ui/react"
+import { Box, Flex, Heading, HStack, Text } from "@chakra-ui/react"
 
 export const Header = () => {
   return (
@@ -27,7 +27,7 @@ export const Header = () => {
         </Heading>
       </HStack>
 
-      <Text
+      <Box
         fontFamily='Nunito'
         fontWeight={400}
         fontSize='2xl'
@@ -36,7 +36,7 @@ export const Header = () => {
       >
         An easy and cute online
         <Text fontWeight={700}> phone agenda </Text>
-      </Text>
+      </Box>
     </Flex>
   )
 }
