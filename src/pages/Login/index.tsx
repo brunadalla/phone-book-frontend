@@ -36,8 +36,9 @@ interface SignInData {
 
 export const Login = () => {
   const navigate = useNavigate()
-
   const { signIn, setIsLoading } = useAuth()
+
+  const [, width] = UseGetScreenWidth()
 
   const {
     formState: { errors },
@@ -50,10 +51,10 @@ export const Login = () => {
   const handleSignIn = (data: SignInData) => {
     setIsLoading(true)
     toast({
-      position: "top-right",
+      position: width >= 768 ? "top-right" : "top",
       duration: 120000,
       isClosable: false,
-      render: ToastLoadingError
+      render: ToastLoadingError,
     })
     signIn(data)
       .then(() => {
@@ -67,8 +68,6 @@ export const Login = () => {
         }, 3000)
       })
   }
-
-  const [, width] = UseGetScreenWidth()
 
   return (
     <Flex
