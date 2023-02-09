@@ -15,17 +15,11 @@ import { useNavigate } from "react-router-dom"
 
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
 
 import { Input } from "../../components/Form/Input"
 import { api } from "../../services/api"
+import { signUpSchema } from "../../validators"
 
-const signInSchema = yup.object().shape({
-  name: yup.string().required("name required"),
-  phone: yup.string().required("phone required"),
-  email: yup.string().required("email required").email("invalid email"),
-  password: yup.string().required("password required"),
-})
 
 interface ISignupData {
   name: string
@@ -44,7 +38,7 @@ const ModalRegister = () => {
     register,
     handleSubmit,
   } = useForm({
-    resolver: yupResolver(signInSchema),
+    resolver: yupResolver(signUpSchema),
   })
 
   const handleSignup = async ({

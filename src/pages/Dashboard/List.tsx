@@ -1,12 +1,10 @@
 import {
-  Box,
   Flex,
   Grid,
   GridItem,
   HStack,
   Skeleton,
   Text,
-  VStack,
 } from "@chakra-ui/react"
 
 import ModalCreateContact from "../../components/Modal/ModalCreateContact"

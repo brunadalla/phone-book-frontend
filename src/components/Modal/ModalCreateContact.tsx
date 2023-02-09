@@ -13,24 +13,18 @@ import {
 
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
 
 import { Input } from "../../components/Form/Input"
 import { UseGetScreenWidth } from "../../hook"
 import { useContact } from "../../contexts/ContactContext"
 import { useState } from "react"
+import { createContactSchema } from "../../validators"
 
 interface IContactData {
   name: string
   phone: string
   email: string
 }
-
-const createContactSchema = yup.object().shape({
-  name: yup.string().required("name required"),
-  phone: yup.string().required("phone required"),
-  email: yup.string().required("email required").email("invalid email"),
-})
 
 const ModalCreateContact = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()

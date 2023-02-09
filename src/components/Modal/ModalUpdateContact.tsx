@@ -12,11 +12,11 @@ import {
 
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
 
 import { Input } from "../../components/Form/Input"
 import { useContact } from "../../contexts/ContactContext"
 import { HiOutlinePencilAlt } from "react-icons/hi"
+import { updateContactSchema } from "../../validators"
 
 interface IContactData {
   name?: string
@@ -31,11 +31,6 @@ interface IUpdateContactProps {
   email: string
 }
 
-const updateContactSchema = yup.object().shape({
-  name: yup.string(),
-  phone: yup.string(),
-  email: yup.string().email("invalid email"),
-})
 
 const ModalUpdateContact = ({
   id,

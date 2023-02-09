@@ -156,9 +156,36 @@ const ContactProvider = ({ children }: IContactProviderProps) => {
         } else {
           const filteredContacts = contacts.filter(
             (contact) =>
-              contact.name.includes(value) ||
-              contact.phone.includes(value) ||
-              contact.email.includes(value)
+              contact.name
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase()
+                .includes(
+                  value
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .toLowerCase()
+                ) ||
+              contact.phone
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase()
+                .includes(
+                  value
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .toLowerCase()
+                ) ||
+              contact.email
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase()
+                .includes(
+                  value
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .toLowerCase()
+                )
           )
           setContacts(filteredContacts)
         }

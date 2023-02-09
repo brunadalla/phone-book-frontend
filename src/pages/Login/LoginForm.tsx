@@ -1,12 +1,12 @@
 import { useForm } from "react-hook-form"
 import { FieldValues, SubmitHandler } from "react-hook-form/dist/types"
 import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
 
 import { Button, Flex, VStack } from "@chakra-ui/react"
 import { FaEnvelope, FaLock } from "react-icons/fa"
 
 import { Input } from "../../components/Form/Input"
+import { signInSchema } from "../../validators"
 
 interface SignInData {
     email: string
@@ -16,11 +16,6 @@ interface SignInData {
 interface LoginFormProps {
     handleSignIn: (data: SignInData) => void
 }
-
-const signInSchema = yup.object().shape({
-  email: yup.string().required("Email required").email("Invalid email"),
-  password: yup.string().required("Password required"),
-})
 
 export const LoginForm = ({ handleSignIn }: LoginFormProps) => {
   const {
